@@ -1,7 +1,20 @@
 ﻿@page "/"
+@inject HttpClient Http
 
-<h1>Hello, world!</h1>
+<h1>DTDL Model Parsing Web App</h1>
 
-Welcome to your new app.
+<p>Model to be parsed:</p>
+<textarea @bind="Model" contenteditable="true" style="font-family: 'Lucida Console'; font-size:smaller" spellcheck="false" cols="100" rows="30" />
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    private string Model
+    {
+        get { return Program._model; }
+        set { Program._model = value; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await Http.GetStringAsync("sample-data/model.json");
+    }
+}

@@ -1,11 +1,11 @@
 @page "/fetchdata"
 @inject HttpClient Http
 
-<h1>Weather forecast</h1>
+<h1>Parser Results</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
+<p>This component demonstrates calling the DTDL model parser in web assembly</p>
 
-@if (forecasts == null)
+@if (parserResults == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -14,20 +14,22 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>DTMI</th>
+                <th>EntityKind</th>
+                <th>Description</th>
+                <th>DisplayName</th>
+                <th>Comment</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var parserResult in parserResults)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@parserResult.Dtmi</td>
+                    <td>@parserResult.EntityKind</td>
+                    <td>@parserResult.Description</td>
+                    <td>@parserResult.DisplayName</td>
+                    <td>@parserResult.Comment</td>
                 </tr>
             }
         </tbody>
@@ -35,29 +37,42 @@ else
 }
 
 @code {
-    private WeatherForecast[] forecasts;
+    private ParserResult[] parserResults;
 
     protected override async Task OnInitializedAsync()
     {
-        try
+        if (!string.IsNullOrEmpty(Program._model))
         {
-            await Task.Delay(1);
-            forecasts = null;// await Http.GetFromJsonAsync<WeatherForecast[]>("/api/WeatherForecast");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
+            ModelParser parser = new ModelParser();
+            parser.DtmiResolver = DtmiResolverCallback;
+            var results = await parser.ParseAsync(new string[] { Program._model });
+            List<ParserResult> tableContent = new List<ParserResult>();
+            foreach (var result in results)
+            {
+                tableContent.Add(new ParserResult()
+                {
+                    Dtmi = result.Key.ToString(),
+                    EntityKind = result.Value.EntityKind.ToString(),
+                    DisplayName = string.Join(',', result.Value.DisplayName.ToArray()),
+                    Description = string.Join(',', result.Value.Description.ToArray()),
+                    Comment = result.Value.Comment
+                });
+            }
+            parserResults = tableContent.ToArray();
         }
     }
 
-    public class WeatherForecast
+    private static Task<IEnumerable<string>> DtmiResolverCallback(IReadOnlyCollection<Dtmi> dtmis)
     {
-        public DateTime Date { get; set; }
+        throw new NotImplementedException();
+    }
 
-        public int TemperatureC { get; set; }
-
-        public string Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public class ParserResult
+    {
+        public string Dtmi { get; set; }
+        public string EntityKind { get; set; }
+        public string Description { get; set; }
+        public string DisplayName { get; set; }
+        public string Comment { get; set; }
     }
 }

@@ -1,0 +1,40 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:parser:test;1",
+  "@type": "Interface",
+  "displayName": "test",
+  "comment": "Ut enim ad minima veniam",
+  "description": "simple test interface",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "temperature",
+      "schema": "double",
+      "displayName": "Temperature",
+      "comment": "Lorem ipsum",
+      "description": "outdoor temperature measurement"
+    },
+    {
+      "@type": "Property",
+      "name": "deviceStatus",
+      "schema": "string",
+      "displayName": "Status",
+      "comment": "Sed ut perspiciatis",
+      "description": "status of the environmental sensor device"
+    },
+    {
+      "@type": "Command",
+      "name": "reboot",
+      "displayName": "Device Reboot",
+      "comment": "Temporibus autem quibusdam",
+      "description": "reboots the environmental sensor device",
+      "request": {
+        "name": "delay",
+        "schema": "integer",
+        "displayName": "Delay",
+        "comment": "Nam libero tempore",
+        "description": "delay in seconds until reboot starts"
+      }
+    }
+  ]
+}
