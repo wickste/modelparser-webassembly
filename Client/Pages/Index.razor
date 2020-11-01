@@ -1,10 +1,11 @@
 ﻿@page "/"
 @inject HttpClient Http
 
-<h1>DTDL Model Parsing Web App</h1>
+<h1>DTDL Model Parsing in WebAssembly</h1>
 
 <p>Model to be parsed:</p>
-<textarea @bind="Model" contenteditable="true" style="font-family: 'Lucida Console'; font-size:smaller" spellcheck="false" cols="100" rows="30" />
+<textarea @bind="Model" contenteditable="true" style="font-family: 'Lucida Console'; font-size:smaller" spellcheck="false" cols="100" rows="30" /><br/>
+<p style="font-style:italic">switch to "Parse results" to run the parser on this model</p>
 
 @code {
     private string Model
