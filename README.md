@@ -4,7 +4,7 @@ This sample contains an example [Blazor WebAssembly](https://docs.microsoft.com/
 
 ## Getting Started
 
-Explore the sample app hosted here as [Azure Static Web App](https://mango-moss-0edd7411e.azurestaticapps.net/)  
+Explore the sample app hosted as Azure Static Web App [here](https://mango-moss-0edd7411e.azurestaticapps.net/)  
 
 ## Build and Run from VS
 
